@@ -86,10 +86,8 @@ export default function BillingData() {
                   Endereço de email
                 </label>
                 <span
-                  type="email"
                   id="email_address"
                   className={disabledDefaultInput}
-                  disabled
                 >
                   exemplo@hotmail.com
                 </span>
@@ -144,9 +142,11 @@ export default function BillingData() {
                     <p className={errorFormMessage}>Este campo é obrigatório</p>
                   )) ||
                     (errors.cpf.message && (
-                      <p className={errorFormMessage}>
-                        <span>{errors.cpf.message}</span>
-                      </p>
+                      <span className={errorFormMessage}>
+                        <>
+                          {errors.cpf.message}
+                        </>
+                      </span>
                     )))}
               </div>
 

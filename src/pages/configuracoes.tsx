@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Layout from '@/components/layout/Layout';
 import Heading from '@/components/app/Heading';
+import ChangePassword from '@/components/configuracoes/ChangePassword';
 
 const pageData = {
   title: 'Configurações',
@@ -23,6 +24,7 @@ export default function Configuracoes() {
       <Layout title={pageData.title}>
         <>
           <Heading page={pageData} />
+          <ChangePassword />
         </>
       </Layout>
     </>
