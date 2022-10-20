@@ -199,7 +199,7 @@ export default function Address({
         >
           <option value="">Selecione uma cidade</option>
           {cities(selectedState ? selectedState : null).map((city, cityIdx) => (
-            <option suppressHydrationWarning value={city.id} key={cityIdx}>
+            <option suppressHydrationWarning value={city.name} key={cityIdx}>
               {city.name}
             </option>
           ))}
