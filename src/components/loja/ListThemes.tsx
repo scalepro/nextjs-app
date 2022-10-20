@@ -1,9 +1,10 @@
+import { IconContext } from 'react-icons';
 import {
   HiCheckCircle,
   HiPlusCircle,
   HiMinusCircle,
   HiPencilAlt,
-  HiEye,
+  HiEye
 } from 'react-icons/hi';
 
 const themes = [
@@ -38,9 +39,9 @@ export default function ListThemes() {
             {item.active && (
               <div className="absolute right-3 top-3">
                 <div className="inline-flex items-center px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
-                  <span className="w-4 h-4 text-green-600 mr-1">
+                  <IconContext.Provider value={{ className: 'w-4 h-4 text-green-600 mr-1' }}>
                     <HiCheckCircle />
-                  </span>
+                  </IconContext.Provider>
                   Instalado
                 </div>
               </div>
@@ -69,9 +70,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-bl-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <span className="w-4 h-4 text-gray-400">
+                      <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
                         <HiPencilAlt />
-                      </span>
+                      </IconContext.Provider>
                       <div className="visible-fit-element">
                         <span className="ml-2">Editar</span>
                       </div>
@@ -81,9 +82,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-bl-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <span className="w-4 h-4 text-gray-400">
+                      <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
                         <HiEye />
-                      </span>
+                      </IconContext.Provider>
                       <div className="visible-fit-element">
                         <span className="ml-2">Visualizar</span>
                       </div>
@@ -96,9 +97,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-br-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <span className="w-4 h-4 text-gray-400">
+                      <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
                         <HiMinusCircle />
-                      </span>
+                      </IconContext.Provider>
                       <div className="visible-fit-element">
                         <span className="ml-2">Desinstalar</span>
                       </div>
@@ -108,9 +109,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-br-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <span className="w-4 h-4 text-gray-400">
+                      <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
                         <HiPlusCircle />
-                      </span>
+                      </IconContext.Provider>
                       <div className="visible-fit-element">
                         <span className="ml-2">Instalar</span>
                       </div>
