@@ -30,17 +30,19 @@ export default function ListThemes() {
         role="list"
         className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
       >
-        {themes.map((item) => (
+        {themes.map((item, itemIdx) => (
           <li
-            key={item.name}
+            key={itemIdx}
             className="relative col-span-1 flex flex-col text-center bg-white dark:bg-gray-800 rounded-lg shadow divide-y overflow-hidden divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700"
           >
             {item.active && (
               <div className="absolute right-3 top-3">
-                <span className="inline-flex items-center px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
-                  <HiCheckCircle className="w-4 h-4 text-green-600 mr-1" />
+                <div className="inline-flex items-center px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
+                  <span className="w-4 h-4 text-green-600 mr-1">
+                    <HiCheckCircle />
+                  </span>
                   Instalado
-                </span>
+                </div>
               </div>
             )}
             <div className="w-full h-48 overflow-hidden">
@@ -67,7 +69,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-bl-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <HiPencilAlt className="w-4 h-4 text-gray-400" />
+                      <span className="w-4 h-4 text-gray-400">
+                        <HiPencilAlt />
+                      </span>
                       <div className="visible-fit-element">
                         <span className="ml-2">Editar</span>
                       </div>
@@ -77,7 +81,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-bl-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <HiEye className="w-4 h-4 text-gray-400" />
+                      <span className="w-4 h-4 text-gray-400">
+                        <HiEye />
+                      </span>
                       <div className="visible-fit-element">
                         <span className="ml-2">Visualizar</span>
                       </div>
@@ -90,7 +96,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-br-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <HiMinusCircle className="w-4 h-4 text-gray-400" />
+                      <span className="w-4 h-4 text-gray-400">
+                        <HiMinusCircle />
+                      </span>
                       <div className="visible-fit-element">
                         <span className="ml-2">Desinstalar</span>
                       </div>
@@ -100,7 +108,9 @@ export default function ListThemes() {
                       href="#"
                       className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-br-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
-                      <HiPlusCircle className="w-4 h-4 text-gray-400" />
+                      <span className="w-4 h-4 text-gray-400">
+                        <HiPlusCircle />
+                      </span>
                       <div className="visible-fit-element">
                         <span className="ml-2">Instalar</span>
                       </div>
