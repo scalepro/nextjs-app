@@ -1,4 +1,6 @@
 import { IconContext } from 'react-icons';
+import { useState } from 'react';
+import InstallThemeModal from '@/components/app/InstallThemeModal';
 import {
   HiCheckCircle,
   HiPlusCircle,
@@ -9,14 +11,14 @@ import {
 
 const themes = [
   {
-    name: 'Jane Cooper',
+    name: 'Jane',
     description: 'Paradigm Representative',
     image:
       'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&h=320',
     active: true,
   },
   {
-    name: 'Jane Cooper',
+    name: 'Cooper',
     description: 'Paradigm Representative',
     image:
       'https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&h=320',
@@ -25,8 +27,14 @@ const themes = [
 ];
 
 export default function ListThemes() {
+  const [themeModalView, setThemeModalView] = useState(false);
+
   return (
     <>
+      <InstallThemeModal 
+        themeModalView={themeModalView}
+        setThemeModalView={setThemeModalView}
+      />
       <ul
         role="list"
         className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
@@ -107,6 +115,7 @@ export default function ListThemes() {
                   ) : (
                     <a
                       href="#"
+                      onClick={()=>setThemeModalView(true)}
                       className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-br-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
                       <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
