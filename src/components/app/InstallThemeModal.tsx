@@ -54,7 +54,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
       <Fragment>
         <Modal
           show={themeModalView}
-          size="7xl"
+          size="lg"
           onClose={() => {
             setThemeModalView(false)
           }}
@@ -70,7 +70,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                     Cor primária
                   </label>
                   <div className="flex">
-                    <button onClick={()=>setPrimaryColorPicker(true)} className="relative flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button">
+                    <button onClick={()=>setPrimaryColorPicker(true)} className="relative flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500" type="button">
                       <div id="primaryColorContainer" style={{ visibility: primaryColorPicker ? "visible" : "hidden" }} className="-ml-4 mt-4 absolute top-full z-10" ref={primaryColorPickerRef}>
                         <BlockPicker 
                           color={primaryColor}
@@ -106,7 +106,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                                 errors.primary_color.type === 'maxLength')
                               ? errorInput
                               : 'bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-r-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
-                            'focus-visible:ring-primary-500 focus-visible:border-primary-500 uppercase'
+                            'uppercase focus-visible:outline-none focus:ring-1 focus:z-10'
                           )}
                           placeholder="#AABBCC"
                         />
@@ -129,7 +129,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                     Cor secundária
                   </label>
                   <div className="flex">
-                    <button onClick={()=>setSecondaryColorPicker(true)} className="relative flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button">
+                    <button onClick={()=>setSecondaryColorPicker(true)} className="relative flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500" type="button">
                       <div id="secondaryColorContainer" style={{ visibility: secondaryColorPicker ? "visible" : "hidden" }} className="-ml-4 mt-4 absolute top-full z-10" ref={secondaryColorPickerRef}>
                         <BlockPicker 
                           color={secondaryColor}
@@ -165,7 +165,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                                 errors.secondary_color.type === 'maxLength')
                               ? errorInput
                               : 'bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-r-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
-                            'focus-visible:ring-primary-500 focus-visible:border-primary-500 uppercase'
+                            'uppercase focus-visible:outline-none focus:ring-1 focus:z-10'
                           )}
                           placeholder="#BBCCDD"
                         />
@@ -183,6 +183,29 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                         )))}
                   </div>
                 </div>
+                <div className="col-span-4">
+                    <label htmlFor="header_message" className={defaultLabel}>
+                      Mensagem do header
+                    </label>
+                    <input
+                      type="text"
+                      id="header_message"
+                      className={classNames(
+                        errors.header_message && !errors.header_message.message
+                          ? errorInput
+                          : defaultInput,
+                        ' uppercase'
+                      )}
+                      placeholder="EX.: SÓ HOJE! FRETE GRÁTIS PARA TODO O BRASIL"
+                      {...register('header_message', { required: true })}
+                    />
+                    {errors.header_message &&
+                      errors.header_message.type === 'required' && (
+                        <p className={errorFormMessage}>
+                          Este campo é obrigatório
+                        </p>
+                      )}
+                  </div>
               </div>
             </div>
           </Modal.Body>
