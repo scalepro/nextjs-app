@@ -24,6 +24,30 @@ export default function Pais() {
 
   return (
     <>
+      <div className="col-span-4">
+        <label htmlFor="header_message" className={defaultLabel}>
+          Mensagem do header
+        </label>
+        <input
+          type="text"
+          id="header_message"
+          className={classNames(
+            errors.header_message && !errors.header_message.message
+              ? errorInput
+              : defaultInput,
+            ' uppercase'
+          )}
+          placeholder="EX.: SÓ HOJE! FRETE GRÁTIS PARA TODO O BRASIL"
+          {...register('header_message', { required: true })}
+        />
+        {errors.header_message &&
+          errors.header_message.type === 'required' && (
+            <p className={errorFormMessage}>
+              Este campo é obrigatório
+            </p>
+          )}
+      </div>
+
       <h1>Lista</h1>
       <select
         id="location"

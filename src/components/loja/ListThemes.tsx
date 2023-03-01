@@ -74,8 +74,7 @@ export default function ListThemes() {
               <div className="-mt-px flex divide-x divide-gray-200 dark:divide-gray-700">
                 <div className="w-0 flex-1 flex">
                   {item.active ? (
-                    <a
-                      href="#"
+                    <button
                       className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-bl-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
                       <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
@@ -84,10 +83,9 @@ export default function ListThemes() {
                       <div className="visible-fit-element">
                         <span className="ml-2">Editar</span>
                       </div>
-                    </a>
+                    </button>
                   ) : (
-                    <a
-                      href="#"
+                    <button
                       className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-bl-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
                       <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
@@ -96,13 +94,12 @@ export default function ListThemes() {
                       <div className="visible-fit-element">
                         <span className="ml-2">Visualizar</span>
                       </div>
-                    </a>
+                    </button>
                   )}
                 </div>
                 <div className="-ml-px w-0 flex-1 flex">
                   {item.active ? (
-                    <a
-                      href="#"
+                    <button
                       className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-br-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
                       <IconContext.Provider value={{ className: 'w-4 h-4 text-gray-400' }}>
@@ -111,10 +108,9 @@ export default function ListThemes() {
                       <div className="visible-fit-element">
                         <span className="ml-2">Desinstalar</span>
                       </div>
-                    </a>
+                    </button>
                   ) : (
-                    <a
-                      href="#"
+                    <button
                       onClick={()=>setThemeModalView(true)}
                       className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-500 dark:text-gray-300 font-medium border border-transparent rounded-br-lg hover:text-gray-600 dark:hover:text-gray-200"
                     >
@@ -124,7 +120,7 @@ export default function ListThemes() {
                       <div className="visible-fit-element">
                         <span className="ml-2">Instalar</span>
                       </div>
-                    </a>
+                    </button>
                   )}
                 </div>
               </div>

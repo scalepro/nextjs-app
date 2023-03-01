@@ -23,3 +23,7 @@
   max-width: max(0px, calc((100% - 120px) * 999));
   overflow: hidden;
 }
+
+div[data-testid="modal"] {
+  height: 100%;
+}
