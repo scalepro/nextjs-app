@@ -204,7 +204,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                           <BlockPicker 
                             color={secondaryColor}
                             onChangeComplete={(color) => {
-                              setPrimaryColor(color.hex);
+                              setSecondaryColor(color.hex);
                               setValue('secondary_color', color.hex);
                             }}
                             colors={colors}
