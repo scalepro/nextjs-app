@@ -11,6 +11,7 @@ import Stepper from '@/components/app/Stepper';
 import {
   defaultInput,
   errorInput,
+  errorInputDefineColor,
   defaultLabel,
   errorFormMessage,
 } from '@/styles/StyledElements';
@@ -49,14 +50,22 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
     "#aed581", "#fff176",
   ];
 
+  const defaultValues = {
+    primary_color: primaryColor, 
+    secondary_color: secondaryColor 
+  };
+
   const {
     register,
     handleSubmit,
     reset,
     control,
+    setValue,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({ 
+    defaultValues
+  });
 
   const resetElements = () => {
     reset();
@@ -128,7 +137,10 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                         <div id="primaryColorContainer" style={{ visibility: primaryColorPicker ? "visible" : "hidden" }} className="-ml-4 mt-4 absolute top-full z-10" ref={primaryColorPickerRef}>
                           <BlockPicker 
                             color={primaryColor}
-                            onChangeComplete={(color) => setPrimaryColor(color.hex)}
+                            onChangeComplete={(color) => {
+                              setPrimaryColor(color.hex);
+                              setValue('primary_color', color.hex);
+                            }}
                             colors={colors}
                           />
                         </div>
@@ -151,6 +163,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                             onChange={(event)=>{
                               let { name, value } = event.target;
                               setPrimaryColor(value);
+                              setValue('primary_color', value);
                             }}
                             className={classNames(
                               errors.primary_color &&
@@ -158,7 +171,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                                   errors.primary_color.type === 'required' ||
                                   errors.primary_color.type === 'minLength' ||
                                   errors.primary_color.type === 'maxLength')
-                                ? errorInput
+                                ? errorInputDefineColor
                                 : 'bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-r-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
                               'uppercase focus-visible:outline-none focus:ring-1 focus:z-10'
                             )}
@@ -166,16 +179,19 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                           />
                         )}
                       />
-                      {errors.primary_color &&
-                        (((errors.primary_color.type === 'minLength' ||
+                    </div>
+                    <div>
+                      {errors.primary_color && (
+                        ((errors.primary_color.type === 'minLength' ||
                           errors.primary_color.type === 'maxLength') && (
                           <p className={errorFormMessage}>Código inválido</p>
                         )) ||
-                          (errors.primary_color.type === 'required' && (
-                            <p className={errorFormMessage}>
-                              Este campo é obrigatório
-                            </p>
-                          )))}
+                        (errors.primary_color.type === 'required' && (
+                          <p className={errorFormMessage}>
+                            Este campo é obrigatório
+                          </p>
+                        ))
+                      )}
                     </div>
                   </div>
                   <div className="col-span-4">
@@ -187,7 +203,10 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                         <div id="secondaryColorContainer" style={{ visibility: secondaryColorPicker ? "visible" : "hidden" }} className="-ml-4 mt-4 absolute top-full z-10" ref={secondaryColorPickerRef}>
                           <BlockPicker 
                             color={secondaryColor}
-                            onChangeComplete={(color) => setSecondaryColor(color.hex)}
+                            onChangeComplete={(color) => {
+                              setPrimaryColor(color.hex);
+                              setValue('secondary_color', color.hex);
+                            }}
                             colors={colors}
                           />
                         </div>
@@ -210,6 +229,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                             onChange={(event)=>{
                               let { name, value } = event.target;
                               setSecondaryColor(value);
+                              setValue('secondary_color', value);
                             }}
                             className={classNames(
                               errors.secondary_color &&
@@ -217,7 +237,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                                   errors.secondary_color.type === 'required' ||
                                   errors.secondary_color.type === 'minLength' ||
                                   errors.secondary_color.type === 'maxLength')
-                                ? errorInput
+                                ? errorInputDefineColor
                                 : 'bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-r-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
                               'uppercase focus-visible:outline-none focus:ring-1 focus:z-10'
                             )}
@@ -225,17 +245,20 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                           />
                         )}
                       />
-                      {errors.secondary_color &&
-                        (((errors.secondary_color.type === 'minLength' ||
-                          errors.secondary_color.type === 'maxLength') && (
+                    </div>
+                    <div>
+                      {errors.secondary_color && (
+                        ((errors.secondary_color.type === 'minLength' ||
+                        errors.secondary_color.type === 'maxLength') && (
                           <p className={errorFormMessage}>Código inválido</p>
                         )) ||
-                          (errors.secondary_color.type === 'required' && (
-                            <p className={errorFormMessage}>
-                              Este campo é obrigatório
-                            </p>
-                          )))}
-                    </div>
+                        (errors.secondary_color.type === 'required' && (
+                          <p className={errorFormMessage}>
+                            Este campo é obrigatório
+                          </p>
+                        ))
+                      )}
+                  </div>
                   </div>
                   <div className="col-span-4 mt-2">
                     <ToggleSwitch
@@ -260,10 +283,10 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                     Cancelar
                   </Button>
                 ) : (
-                  <Button onClick={() => setActualStep(actualStep - 1) } type="submit">Voltar</Button>
+                  <Button onClick={() => setActualStep(actualStep - 1) }>Voltar</Button>
                 )}
                 {actualStep < (infoSteps.length - 1) ? (
-                  <Button onClick={() => setActualStep(actualStep + 1) } type="submit">Avançar</Button>
+                  <Button onClick={() => setActualStep(actualStep + 1) }>Avançar</Button>
                 ) : (
                   <>
                     {!loadingSubmit ? (
