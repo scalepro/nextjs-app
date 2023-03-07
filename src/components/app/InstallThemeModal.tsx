@@ -17,18 +17,44 @@ import {
 } from '@/styles/StyledElements';
 
 export default function InstallThemeModal({ themeModalView, setThemeModalView }){
-  const [primaryColor, setPrimaryColor] = useState("#AABBCC");
-  const [primaryColorPicker, setPrimaryColorPicker] = useState(false);
-  const primaryColorPickerRef = useRef(null);
-  const [secondaryColor, setSecondaryColor] = useState("#BBCCDD");
-  const [secondaryColorPicker, setSecondaryColorPicker] = useState(false);
-  const secondaryColorPickerRef = useRef(null);
-  const [headerPrimary, setHeaderPrimary] = useState(false);
-  const [dropdownCategories, setDropdownCategories] = useState(false);
-  const dropdownCategoriesRef = useRef(null);
 
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [actualStep, setActualStep] = useState(0);
+  const definedCategories = [
+    {
+      key: 0,
+      name: 'Casa e Cozinha',
+      selected: false,
+    },
+    {
+      key: 1,
+      name: 'Saúde e Beleza',
+      selected: false,
+    },
+    {
+      key: 2,
+      name: 'Jardinagem',
+      selected: false,
+    },
+    {
+      key: 3,
+      name: 'Fitness',
+      selected: false,
+    },
+    {
+      key: 4,
+      name: 'Eletrônicos',
+      selected: false,
+    },
+    {
+      key: 5,
+      name: 'Calçados',
+      selected: false,
+    },
+    {
+      key: 6,
+      name: 'Bebê',
+      selected: false,
+    }
+  ];
 
   const infoSteps = [
     {
@@ -45,12 +71,20 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
     },
   ];
 
-  let categories = [
-    {
-      name: 'Casa e Cozinha',
-      selected: false,
-    }
-  ]
+  const [primaryColor, setPrimaryColor] = useState("#AABBCC");
+  const [primaryColorPicker, setPrimaryColorPicker] = useState(false);
+  const primaryColorPickerRef = useRef(null);
+  const [secondaryColor, setSecondaryColor] = useState("#BBCCDD");
+  const [secondaryColorPicker, setSecondaryColorPicker] = useState(false);
+  const secondaryColorPickerRef = useRef(null);
+  const [headerPrimary, setHeaderPrimary] = useState(false);
+  const [dropdownCategories, setDropdownCategories] = useState(false);
+  const dropdownCategoriesRef = useRef(null);
+  const [categories, setCategories] = useState(definedCategories);
+  const [searchCategory, setSearchCategory] = useState("");
+
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [actualStep, setActualStep] = useState(0);
 
   const colors = [
     "#f44336", "#1976d2",
@@ -63,7 +97,8 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
   const defaultValues = {
     primary_color: primaryColor, 
     secondary_color: secondaryColor,
-    header_message: ''
+    header_message: '',
+    categories: []
   };
 
   const {
@@ -120,6 +155,20 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
       ));
     }, 5000);
   };
+
+  const resultedCategories = (searchCategory) => {
+    if(searchCategory != ""){
+      return categories.filter((item) => item.name.toLowerCase().includes(searchCategory.toLowerCase()));
+    }else{
+      return categories;
+    }
+  }
+
+  const onHandleSearchCategory = (event) => {
+      let { name, value } = event.target;
+      setSearchCategory(value);
+      console.log(value);
+  }
 
   return(
     <>
@@ -328,55 +377,27 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                         <div className="relative">
                           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                              <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path>
                             </svg>
                           </div>
-                          <input type="text" id="input-group-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar categoria" />
+                          <input type="text" onKeyUp={(event) => onHandleSearchCategory(event)} id="input-group-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar categoria" />
                         </div>
                       </div>
                       <ul className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-11" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <label htmlFor="checkbox-item-11" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Bonnie Green</label>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-12" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <label htmlFor="checkbox-item-12" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Jese Leos</label>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-13" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <label htmlFor="checkbox-item-13" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Michael Gough</label>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-14" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <label htmlFor="checkbox-item-14" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Robert Wall</label>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-15" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <label htmlFor="checkbox-item-15" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Joseph Mcfall</label>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-16" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <label htmlFor="checkbox-item-16" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Leslie Livingston</label>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <input id="checkbox-item-17" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                            <label htmlFor="checkbox-item-17" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Roberta Casas</label>
-                          </div>
-                        </li>
+                        {resultedCategories(searchCategory).map((item) => (
+                          <fieldset key={item.key} name={`categories.${item.key}`}>
+                            <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                              <input {...register(`categories.${item.key}.key`)} value={item.key} className="hidden" />
+                              <input {...register(`categories.${item.key}.name`)} value={item.name} className="hidden" />
+                              <input {...register(`categories.${item.key}.selected`)} id={`checkbox-${item.key}`} type="checkbox" defaultChecked={item.selected} value={item.selected ? 1 : 0} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" onClick={() => {
+                                let actualCategory = categories.find(({ key }) => key === item.key);
+                                actualCategory.selected = !actualCategory.selected;
+                                setCategories(categories);
+                              }} />
+                              <label htmlFor={`checkbox-${item.key}`} className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">{item.name}</label>
+                            </div>
+                          </fieldset>
+                        ))}
                       </ul>
                     </div>
                   </div>
