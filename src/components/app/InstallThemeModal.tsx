@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
-import { Modal, Button, ToggleSwitch, Spinner } from 'flowbite-react';
+import { Modal, Button, ToggleSwitch, Spinner, Dropdown, Checkbox, Label } from 'flowbite-react';
 import { useForm, Controller } from 'react-hook-form';
 import MaskedInput from 'react-text-mask';
 import { classNames } from '@/services/functions';
@@ -24,6 +24,9 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
   const [secondaryColorPicker, setSecondaryColorPicker] = useState(false);
   const secondaryColorPickerRef = useRef(null);
   const [headerPrimary, setHeaderPrimary] = useState(false);
+  const [dropdownCategories, setDropdownCategories] = useState(false);
+  const dropdownCategoriesRef = useRef(null);
+
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [actualStep, setActualStep] = useState(0);
 
@@ -42,6 +45,13 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
     },
   ];
 
+  let categories = [
+    {
+      name: 'Casa e Cozinha',
+      selected: false,
+    }
+  ]
+
   const colors = [
     "#f44336", "#1976d2",
     "#e91e63", "#689f38", 
@@ -52,7 +62,8 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
 
   const defaultValues = {
     primary_color: primaryColor, 
-    secondary_color: secondaryColor 
+    secondary_color: secondaryColor,
+    header_message: ''
   };
 
   const {
@@ -83,6 +94,9 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
       }
       if (secondaryColorPickerRef.current && !secondaryColorPickerRef.current.contains(event.target as Node)) {
         setSecondaryColorPicker(false);
+      }
+      if (dropdownCategoriesRef.current && !dropdownCategoriesRef.current.contains(event.target as Node)) {
+        setDropdownCategories(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -124,10 +138,13 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
             </Modal.Header>
             <Modal.Body>
               <div>
-                <div className="grid grid-cols-4 gap-4">
-                  <div className="col-span-4">
-                    <Stepper infoSteps={infoSteps} actualStep={actualStep} />
-                  </div>
+                <div className="mb-4">
+                  <Stepper infoSteps={infoSteps} actualStep={actualStep} />
+                </div>
+                <div id="firstStep" className={classNames(
+                  actualStep == 0 ? "block" : "hidden",
+                  "grid grid-cols-4 gap-4"
+                )}>
                   <div className="col-span-4">
                     <label htmlFor="primary_color" className={defaultLabel}>
                       Cor primária
@@ -266,6 +283,102 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                       label="Cor primária no header"
                       onChange={() => setHeaderPrimary(!headerPrimary)}
                     />
+                  </div>
+                </div>
+                <div id="secondStep" className={classNames(
+                  actualStep == 1 ? "block" : "hidden",
+                  "grid grid-cols-4 gap-4"
+                )}>
+                  <div className="col-span-4">
+                    <label htmlFor="header_message" className={defaultLabel}>
+                      Mensagem do header
+                    </label>
+                    <input
+                      type="text"
+                      id="header_message"
+                      className={classNames(
+                        errors.header_message && !errors.header_message.message
+                          ? errorInput
+                          : defaultInput,
+                        ' uppercase'
+                      )}
+                      placeholder="EX.: SÓ HOJE! FRETE GRÁTIS PARA TODO O BRASIL"
+                      {...register('header_message', { required: true })}
+                    />
+                    {errors.header_message &&
+                      errors.header_message.type === 'required' && (
+                        <p className={errorFormMessage}>
+                          Este campo é obrigatório
+                        </p>
+                      )
+                    }
+                  </div>
+                  <div className="col-span-4">
+                    <span className={defaultLabel}>Categorias</span>
+                    <button id="dropdownCategoriesButton" onClick={() => setDropdownCategories(!dropdownCategories)} className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                      Selecionar categorias
+                      <svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                    </button>
+
+                    <div id="dropdownCategories" ref={dropdownCategoriesRef} className={classNames(dropdownCategories ? "block" : "hidden","absolute mt-2 z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-600")}>
+                      <div className="p-3">
+                        <label htmlFor="input-group-search" className="sr-only">Buscar</label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                            </svg>
+                          </div>
+                          <input type="text" id="input-group-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar categoria" />
+                        </div>
+                      </div>
+                      <ul className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="checkbox-item-11" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                            <label htmlFor="checkbox-item-11" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Bonnie Green</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="checkbox-item-12" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                            <label htmlFor="checkbox-item-12" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Jese Leos</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="checkbox-item-13" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                            <label htmlFor="checkbox-item-13" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Michael Gough</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="checkbox-item-14" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                            <label htmlFor="checkbox-item-14" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Robert Wall</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="checkbox-item-15" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                            <label htmlFor="checkbox-item-15" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Joseph Mcfall</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="checkbox-item-16" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                            <label htmlFor="checkbox-item-16" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Leslie Livingston</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <input id="checkbox-item-17" type="checkbox" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                            <label htmlFor="checkbox-item-17" className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">Roberta Casas</label>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
