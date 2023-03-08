@@ -1,20 +1,13 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
-import { Modal, Button, ToggleSwitch, Spinner, Dropdown, Checkbox, Label } from 'flowbite-react';
-import { useForm, Controller } from 'react-hook-form';
-import MaskedInput from 'react-text-mask';
+import { Modal, Button, Spinner } from 'flowbite-react';
+import { useForm } from 'react-hook-form';
 import { classNames } from '@/services/functions';
-import { BlockPicker } from 'react-color';
-import { HiChevronDown, HiColorSwatch, HiNewspaper, HiFlag } from 'react-icons/hi';
+import { HiColorSwatch, HiNewspaper, HiFlag } from 'react-icons/hi';
 import toast, { Toaster } from 'react-hot-toast';
 import Toast from '@/components/app/Toast';
 import Stepper from '@/components/app/Stepper';
-import {
-  defaultInput,
-  errorInput,
-  errorInputDefineColor,
-  defaultLabel,
-  errorFormMessage,
-} from '@/styles/StyledElements';
+import FirstStepModalTheme from './FirstSepModalTheme';
+import SecondStepModalTheme from './SecondStepModalTheme';
 
 export default function InstallThemeModal({ themeModalView, setThemeModalView }){
 
@@ -81,7 +74,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
   const [dropdownCategories, setDropdownCategories] = useState(false);
   const dropdownCategoriesRef = useRef(null);
   const [categories, setCategories] = useState(definedCategories);
-  const [searchCategory, setSearchCategory] = useState("");
+  const [searchCategories, setSearchCategories] = useState("");
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [actualStep, setActualStep] = useState(0);
@@ -156,7 +149,7 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
     }, 5000);
   };
 
-  const resultedCategories = (searchCategory) => {
+  const listCategories = (searchCategory) => {
     if(searchCategory != ""){
       return categories.filter((item) => item.name.toLowerCase().includes(searchCategory.toLowerCase()));
     }else{
@@ -164,10 +157,10 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
     }
   }
 
-  const onHandleSearchCategory = (event) => {
-      let { name, value } = event.target;
-      setSearchCategory(value);
-      console.log(value);
+  const onHandleSearchCategories = (event) => {
+    let { name, value } = event.target;
+    setSearchCategories(value);
+    console.log(value);
   }
 
   return(
@@ -194,213 +187,41 @@ export default function InstallThemeModal({ themeModalView, setThemeModalView })
                   actualStep == 0 ? "block" : "hidden",
                   "grid grid-cols-4 gap-4"
                 )}>
-                  <div className="col-span-4">
-                    <label htmlFor="primary_color" className={defaultLabel}>
-                      Cor primária
-                    </label>
-                    <div className="flex">
-                      <button onClick={()=>setPrimaryColorPicker(true)} className="relative flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500" type="button">
-                        <div id="primaryColorContainer" style={{ visibility: primaryColorPicker ? "visible" : "hidden" }} className="-ml-4 mt-4 absolute top-full z-10" ref={primaryColorPickerRef}>
-                          <BlockPicker 
-                            color={primaryColor}
-                            onChangeComplete={(color) => {
-                              setPrimaryColor(color.hex);
-                              setValue('primary_color', color.hex);
-                            }}
-                            colors={colors}
-                          />
-                        </div>
-                        <span className="w-5 h-4 mr-1 rounded-sm" style={{backgroundColor: primaryColor}}></span>
-                        <HiChevronDown className="w-4 h-4 ml-1" />
-                      </button>
-                      <Controller
-                        control={control}
-                        name="primary_color"
-                        rules={{
-                          required: true,
-                          minLength: 7,
-                          maxLength: 7,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <MaskedInput
-                            mask={['#', /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i]}
-                            guide={false}
-                            value={primaryColor}
-                            onChange={(event)=>{
-                              let { name, value } = event.target;
-                              setPrimaryColor(value);
-                              setValue('primary_color', value);
-                            }}
-                            className={classNames(
-                              errors.primary_color &&
-                                (errors.primary_color.message ||
-                                  errors.primary_color.type === 'required' ||
-                                  errors.primary_color.type === 'minLength' ||
-                                  errors.primary_color.type === 'maxLength')
-                                ? errorInputDefineColor
-                                : 'bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-r-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
-                              'uppercase focus-visible:outline-none focus:ring-1 focus:z-10'
-                            )}
-                            placeholder="#AABBCC"
-                          />
-                        )}
-                      />
-                    </div>
-                    <div>
-                      {errors.primary_color && (
-                        ((errors.primary_color.type === 'minLength' ||
-                          errors.primary_color.type === 'maxLength') && (
-                          <p className={errorFormMessage}>Código inválido</p>
-                        )) ||
-                        (errors.primary_color.type === 'required' && (
-                          <p className={errorFormMessage}>
-                            Este campo é obrigatório
-                          </p>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-span-4">
-                    <label htmlFor="secondary_color" className={defaultLabel}>
-                      Cor secundária
-                    </label>
-                    <div className="flex">
-                      <button onClick={()=>setSecondaryColorPicker(true)} className="relative flex-shrink-0 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500" type="button">
-                        <div id="secondaryColorContainer" style={{ visibility: secondaryColorPicker ? "visible" : "hidden" }} className="-ml-4 mt-4 absolute top-full z-10" ref={secondaryColorPickerRef}>
-                          <BlockPicker 
-                            color={secondaryColor}
-                            onChangeComplete={(color) => {
-                              setSecondaryColor(color.hex);
-                              setValue('secondary_color', color.hex);
-                            }}
-                            colors={colors}
-                          />
-                        </div>
-                        <span className="w-5 h-4 mr-1 rounded-sm" style={{backgroundColor: secondaryColor}}></span>
-                        <HiChevronDown className="w-4 h-4 ml-1" />
-                      </button>
-                      <Controller
-                        control={control}
-                        name="secondary_color"
-                        rules={{
-                          required: true,
-                          minLength: 7,
-                          maxLength: 7,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                          <MaskedInput
-                            mask={['#', /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i, /[a-z\d]/i]}
-                            guide={false}
-                            value={secondaryColor}
-                            onChange={(event)=>{
-                              let { name, value } = event.target;
-                              setSecondaryColor(value);
-                              setValue('secondary_color', value);
-                            }}
-                            className={classNames(
-                              errors.secondary_color &&
-                                (errors.secondary_color.message ||
-                                  errors.secondary_color.type === 'required' ||
-                                  errors.secondary_color.type === 'minLength' ||
-                                  errors.secondary_color.type === 'maxLength')
-                                ? errorInputDefineColor
-                                : 'bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-r-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500',
-                              'uppercase focus-visible:outline-none focus:ring-1 focus:z-10'
-                            )}
-                            placeholder="#BBCCDD"
-                          />
-                        )}
-                      />
-                    </div>
-                    <div>
-                      {errors.secondary_color && (
-                        ((errors.secondary_color.type === 'minLength' ||
-                        errors.secondary_color.type === 'maxLength') && (
-                          <p className={errorFormMessage}>Código inválido</p>
-                        )) ||
-                        (errors.secondary_color.type === 'required' && (
-                          <p className={errorFormMessage}>
-                            Este campo é obrigatório
-                          </p>
-                        ))
-                      )}
-                  </div>
-                  </div>
-                  <div className="col-span-4 mt-2">
-                    <ToggleSwitch
-                      checked={headerPrimary}
-                      label="Cor primária no header"
-                      onChange={() => setHeaderPrimary(!headerPrimary)}
-                    />
-                  </div>
+                  <FirstStepModalTheme
+                    colors={colors}
+                    errors={errors}
+                    control={control}
+                    setValue={setValue}
+                    primaryColor={primaryColor}
+                    setPrimaryColor={setPrimaryColor}
+                    primaryColorPicker={primaryColorPicker}
+                    setPrimaryColorPicker={setPrimaryColorPicker}
+                    primaryColorPickerRef={primaryColorPickerRef}
+                    secondaryColor={secondaryColor}
+                    setSecondaryColor={setSecondaryColor}
+                    secondaryColorPicker={secondaryColorPicker}
+                    setSecondaryColorPicker={setSecondaryColorPicker}
+                    secondaryColorPickerRef={secondaryColorPickerRef}
+                    headerPrimary={headerPrimary}
+                    setHeaderPrimary={setHeaderPrimary}
+                  />
                 </div>
                 <div id="secondStep" className={classNames(
                   actualStep == 1 ? "block" : "hidden",
                   "grid grid-cols-4 gap-4"
                 )}>
-                  <div className="col-span-4">
-                    <label htmlFor="header_message" className={defaultLabel}>
-                      Mensagem do header
-                    </label>
-                    <input
-                      type="text"
-                      id="header_message"
-                      className={classNames(
-                        errors.header_message && !errors.header_message.message
-                          ? errorInput
-                          : defaultInput,
-                        ' uppercase'
-                      )}
-                      placeholder="EX.: SÓ HOJE! FRETE GRÁTIS PARA TODO O BRASIL"
-                      {...register('header_message', { required: true })}
-                    />
-                    {errors.header_message &&
-                      errors.header_message.type === 'required' && (
-                        <p className={errorFormMessage}>
-                          Este campo é obrigatório
-                        </p>
-                      )
-                    }
-                  </div>
-                  <div className="col-span-4">
-                    <span className={defaultLabel}>Categorias</span>
-                    <button id="dropdownCategoriesButton" onClick={() => setDropdownCategories(!dropdownCategories)} className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                      Selecionar categorias
-                      <svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </button>
-
-                    <div id="dropdownCategories" ref={dropdownCategoriesRef} className={classNames(dropdownCategories ? "block" : "hidden","absolute mt-2 z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-600")}>
-                      <div className="p-3">
-                        <label htmlFor="input-group-search" className="sr-only">Buscar</label>
-                        <div className="relative">
-                          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                              <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path>
-                            </svg>
-                          </div>
-                          <input type="text" onKeyUp={(event) => onHandleSearchCategory(event)} id="input-group-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar categoria" />
-                        </div>
-                      </div>
-                      <ul className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
-                        {resultedCategories(searchCategory).map((item) => (
-                          <fieldset key={item.key} name={`categories.${item.key}`}>
-                            <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                              <input {...register(`categories.${item.key}.key`)} value={item.key} className="hidden" />
-                              <input {...register(`categories.${item.key}.name`)} value={item.name} className="hidden" />
-                              <input {...register(`categories.${item.key}.selected`)} id={`checkbox-${item.key}`} type="checkbox" defaultChecked={item.selected} value={item.selected ? 1 : 0} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" onClick={() => {
-                                let actualCategory = categories.find(({ key }) => key === item.key);
-                                actualCategory.selected = !actualCategory.selected;
-                                setCategories(categories);
-                              }} />
-                              <label htmlFor={`checkbox-${item.key}`} className="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300 cursor-pointer select-none">{item.name}</label>
-                            </div>
-                          </fieldset>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+                  <SecondStepModalTheme
+                    errors={errors}
+                    register={register}
+                    categories={categories}
+                    setCategories={setCategories}
+                    dropdownCategories={dropdownCategories}
+                    setDropdownCategories={setDropdownCategories}
+                    dropdownCategoriesRef={dropdownCategoriesRef}
+                    searchCategories={searchCategories}
+                    onHandleSearchCategories={onHandleSearchCategories}
+                    listCategories={listCategories}
+                  />
                 </div>
               </div>
             </Modal.Body>
